@@ -1775,21 +1775,23 @@ if (perMin <= 300 && perMin > 0) {
 
     allowMinConsumeCheckout = false; // 預設不允許最低消費結帳
     
-    // 🚨 總額為0阻止結帳
-        if (finalAmount <= 0) {
-            alert("❌ 結帳總額為 0，無法結帳！");
-            checkoutBtn.innerText = originalText;
-            checkoutBtn.disabled = false;
-            return;
-        }
+   const discountVal = Number(document.getElementById("discount").value) || 0;
 
-    // ===== 購物車為空處理 =====
-        if (posCart.length === 0 && perMin > 300) {
-            alert("購物車是空的。");
-            newBtn.innerText = originalText;
-            newBtn.disabled = false;
-            return;
-        }
+// 🚨 總額為0判斷（新規則）
+if (finalAmount <= 0 && discountVal <= 0) {
+    alert("❌ 結帳總額為 0，無法結帳！");
+    checkoutBtn.innerText = originalText;
+    checkoutBtn.disabled = false;
+    return;
+}
+
+        // ===== 購物車為空處理（統一規則）=====
+    if (posCart.length === 0) {
+    alert("❌ 購物車不可為空，請至少加入一筆商品！");
+    checkoutBtn.innerText = originalText;
+    checkoutBtn.disabled = false;
+    return;
+}
     // 如果沒有進入最低消費檢查，則直接繼續結帳流程
     startCheckoutFlow(checkoutBtn, originalText);
 };
